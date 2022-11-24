@@ -66,8 +66,7 @@ def load_page_index(server_socket, client_socket, request):
         server_socket.close()
         return True
 
-
-HOST = input("Input host: ")
+    
 server_socket = create_server()
 client_socket, request = start(server_socket)
 print("[HTTP REQUEST]")
