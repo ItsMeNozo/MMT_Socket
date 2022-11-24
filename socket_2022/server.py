@@ -5,7 +5,7 @@ import time
 BUFSIZE = 1024
 PORT = 8080
 # HOST = socket.gethostbyname(socket.gethostname())
-HOST = "127.0.0.1"
+HOST = ""
 ADDR = (HOST, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!quit"
@@ -49,7 +49,7 @@ def start(server_socket):
 
 
 def send_file_index(client_socket): 
-    with open("./socket_2022/index.html", mode="rb") as index_file:# rb mode for non-text files
+    with open("index.html", mode="rb") as index_file:# rb mode for non-text files
         contents = index_file.read()
     response_message = """HTTP/1.1 200 OK
     Content-Length: %d
@@ -67,6 +67,7 @@ def load_page_index(server_socket, client_socket, request):
         return True
 
 
+HOST = input("Input host: ")
 server_socket = create_server()
 client_socket, request = start(server_socket)
 print("[HTTP REQUEST]")
