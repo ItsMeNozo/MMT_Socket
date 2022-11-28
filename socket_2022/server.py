@@ -1,5 +1,5 @@
 import socket
-import base64
+
 # import threading
 
 BUFFERSIZE = 10240
@@ -61,7 +61,7 @@ def start():
         file_type = filename.split('.')[1]
 
         with open('.' + filename, 'rb') as f:
-            content = base64.b64encode(f.read())
+            content = f.read()
 
         if file_type not in content_type_dict:
             content_type = "application/octet-stream"
@@ -69,24 +69,14 @@ def start():
             content_type = content_type_dict[file_type]
 
         # Send HTTP response
-        # without content-ranges, it cant even load image file
-        if content_type == "image/png":
-            response = """HTTP/1.1 200 OK
-                   Content-Length: %s
-                   Content-Type: %s
-                   Content-Ranges: bytes
-                   """ % (len(content), content_type)
-        else:
-            response = """HTTP/1.1 200 OK\r
-            Content-Length: %s\r
-            Content-Type: %s\r
-        """ % (len(content), content_type)
+        response = """HTTP/1.1 200 OK\r
+                    Content-Length: %s\r
+                    Content-Type: %s\r\n\r\n""" % (len(content), content_type)
 
-        response = response.encode()
-        response += content
-        # print(f"[Response message] {response}")
-        client_socket.sendall(response)
-        # return client_socket, request
+        client_socket.send(response.encode())
+        client_socket.send(content)
+
+        client_socket.close()  # temporarily put this here
 
 
 start()
