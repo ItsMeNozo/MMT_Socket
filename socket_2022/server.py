@@ -27,10 +27,19 @@ def read_request(client_socket):
     request = ""  # set this for time out case
     client_socket.settimeout(5)  # block socket operations for 5 sec
 
-    try:
-        request = client_socket.recv(BUFFERSIZE).decode()
-    except TimeoutError:
-        if not request:
+def read_request(client_socket, client_address):
+    print(f"[NEW CONNECTION] {client_address} connected.")
+    request = ""
+    client_socket.settimeout(1)  # block socket operations for 1 sec
+    try: 
+        chunk = client_socket.recv(BUFFERSIZE).decode()
+        request += chunk
+        # keep reading if TCP request length > buffsize
+        while chunk:
+            chunk = client_socket.recv(BUFFERSIZE).decode()
+            request += chunk
+    except client_socket.timeout: 
+        if request == "": 
             print("DIDN'T RECEIVE DATA. [TIMEOUT]")
     finally:
         return request
