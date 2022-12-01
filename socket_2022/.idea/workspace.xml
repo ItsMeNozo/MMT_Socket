@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f1dec79f-2115-4d74-bb91-198c0d2ef2da" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/socket_2022.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/socket_2022.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -17,7 +17,8 @@ content_type_dict = {
     "jpeg": "image/jpeg",
     "gif": "image/gif",
     "png": "image/png",
-    "css": "text/css"
+    "css": "text/css",
+    "ico": "image/x-icon"
 }
 
 
@@ -124,5 +125,6 @@ def start():
     # accept_thread.daemon = True
     # accept_thread.start()
     accept_incoming_connections(server_socket)
+
 
 start()
