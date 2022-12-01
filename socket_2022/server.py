@@ -32,12 +32,10 @@ def read_request(client_socket, client_address):
     request = ""
     client_socket.settimeout(1)  # block socket operations for 1 sec
     try: 
-        chunk = client_socket.recv(BUFFERSIZE).decode()
-        request += chunk
+        request = client_socket.recv(BUFFERSIZE).decode()
         # keep reading if TCP request length > buffsize
-        while chunk:
-            chunk = client_socket.recv(BUFFERSIZE).decode()
-            request += chunk
+        while request:
+            request += client_socket.recv(BUFFERSIZE).decode()
     except client_socket.timeout: 
         if request == "": 
             print("DIDN'T RECEIVE DATA. [TIMEOUT]")
