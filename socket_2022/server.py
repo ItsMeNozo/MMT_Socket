@@ -2,6 +2,7 @@ import socket
 import threading
 import time
 
+
 BUFFERSIZE = 10240
 PORT = 8080
 # HOST = socket.gethostbyname(socket.gethostname())
@@ -23,67 +24,62 @@ content_type_dict = {
 
 
 def read_request(client_socket):
-    request = "timeout"
+    request = ""  # set this for time out case
     client_socket.settimeout(5)  # block socket operations for 5 sec
 
     try:
         request = client_socket.recv(BUFFERSIZE).decode()
-        if request == 0:
-            return 0
-
     except TimeoutError:
-        if request == "timeout":
+        if not request:
             print("DIDN'T RECEIVE DATA. [TIMEOUT]")
     finally:
         return request
 
 
 def handle_client(client_socket):
-    # while True:
-    request = read_request(client_socket)
-    if "POST" in request:
-        if not check_login(request, client_socket):
-            client_socket.close()
-    print(f"[HTTP REQUEST]\n{request}")
+    while True:
+        request = read_request(client_socket)
+        if not request:
+            # header = """HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
+            header = """HTTP/1.1 200 OK\r\nConnection: close"""
+            break
 
-    # if request != "timeout" and request != "":
-    headers = request.split('\n')
-    filename = headers[0].split()[1]
-    if filename == '/':
-        filename = 'index.html'
+        if "POST" in request:
+            if not check_login(request, client_socket):
+                # client_socket.close()
+                break
+        print(f"[HTTP REQUEST]\n{request}")
 
-    if '.' in filename:
-        file_type = filename.split('.')[1]
-    else:
-        file_type = ""
-    # Return 404 when file does not exist
-    try:
-        with open('.' + filename, 'rb') as f:
-            content = f.read()
-    except FileNotFoundError:
-        response = "HTTP/1.1 404 NOT FOUND\r\nConnection: close\r\n\r\nFile Not Found"
-        client_socket.sendall(response.encode())
-        client_socket.close()
-        # break
+        headers = request.split('\n')
+        filename = headers[0].split()[1]
+        if filename == '/':
+            filename = 'index.html'
 
-    if file_type not in content_type_dict:
-        content_type = "application/octet-stream"
-    else:
-        content_type = content_type_dict[file_type]
+        if '.' in filename:
+            file_type = filename.split('.')[1]
+        else:
+            file_type = ""
+        # Return 404 when file does not exist
+        try:
+            with open('.' + filename, 'rb') as f:
+                content = f.read()
+        except FileNotFoundError:
+            response = "HTTP/1.1 404 NOT FOUND\r\nConnection: close\r\n\r\nFile Not Found"
+            client_socket.sendall(response.encode())
+            break
 
-    # Send HTTP response
-    response = """HTTP/1.1 200 OK\r
-                        Content-Length: %s\r
-                        Content-Type: %s\r\n\r\n""" % (len(content), content_type)
+        if file_type not in content_type_dict:
+            content_type = "application/octet-stream"
+        else:
+            content_type = content_type_dict[file_type]
 
-    client_socket.send(response.encode())
-    client_socket.send(content)
-    # else:
-        # response = "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
-        # client_socket.send(response.encode())
+        # Send HTTP response
+        header = """HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nContent-Type: %s\r\nContent-Length: %s\r\n\r\n""" % (content_type, len(content))
+
+        client_socket.send(header.encode())
+        client_socket.send(content)
+
     client_socket.close()
-        # break
-
 
 
 def accept_incoming_connections(server_socket):
@@ -104,10 +100,8 @@ def accept_incoming_connections(server_socket):
 
 def check_login(request, client_socket):
     if "uname=admin&psw=123456" not in request:
-        response = """HTTP/1.1 401 Unauthorized\r
-                                   Connection: close\r\n\r
-                                   <!DOCTYPE html>
-               <h1>401 Unauthorized</h1><p>This is a private area.</p>"""
+        response = """HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n<!DOCTYPE html>
+        <h1>401 Unauthorized</h1><p>This is a private area.</p>"""
         client_socket.send(response.encode())
         return False
     return True
@@ -121,10 +115,8 @@ def start():
     global server_socket
     print(f"[LISTENING] Server is listening")
     server_socket.listen(1)
-    # accept_thread = threading.Thread(target=accept_incoming_connections, args=(server_socket,))
-    # accept_thread.daemon = True
-    # accept_thread.start()
     accept_incoming_connections(server_socket)
 
 
 start()
+
