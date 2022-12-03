@@ -42,6 +42,7 @@ def handle_client(client_socket):
         if not request:
             # header = """HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
             header = """HTTP/1.1 200 OK\r\nConnection: close"""
+            client_socket.send(header.encode())
             break
 
         if "POST" in request:
