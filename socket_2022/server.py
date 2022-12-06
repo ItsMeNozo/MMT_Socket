@@ -57,7 +57,8 @@ def handle_client(client_socket, client_address):
         try:
             request = client_socket.recv(server_config.BUFFERSIZE).decode()
         except socket.timeout:
-            print("[TIMEOUT]")
+            print("DIDN'T RECEIVE DATA. [TIMEOUT]")
+            break
 
         if not request:
             header = """HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
