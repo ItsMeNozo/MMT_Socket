@@ -39,14 +39,12 @@ def handle_client(client_socket, client_address):
             request = client_socket.recv(server_config.BUFFERSIZE).decode()
         except socket.timeout:
             print("DIDN'T RECEIVE DATA. [TIMEOUT]")
-            client_socket.close()
             break
 
         if not request:
             # header = """HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
             header = """HTTP/1.1 200 OK\r\nConnection: close"""
             client_socket.send(header.encode())
-            client_socket.close()
             break
 
         if "POST" in request:
