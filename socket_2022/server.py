@@ -29,7 +29,9 @@ def read_request(client_socket):
         return request
 
 
-def handle_client(client_socket):
+def handle_client(client_socket, client_address):
+    print(f"[NEW CONNECTION] {client_address} connected.")
+
     while True:
         # request = read_request(client_socket)
         client_socket.settimeout(2)
@@ -89,12 +91,10 @@ def accept_incoming_connections(server_socket):
     """Sets up handling for incoming clients."""
     while True:
         client_socket, client_address = server_socket.accept()
-        print(f"[NEW CONNECTION] {client_address} connected.")
-
-        request_thread = threading.Thread(target=handle_client, args=(client_socket,))
-        request_thread.daemon = True
+        request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+        # request_thread.daemon = True
         request_thread.start()
-        request_thread.join()
+        # request_thread.join()
 
         print(f"[NEW CONNECTION] {client_address} closed.")
 
@@ -121,3 +121,4 @@ def start(server_socket):
 
 
 start(server_socket)
+
