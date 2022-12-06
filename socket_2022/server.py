@@ -85,6 +85,7 @@ def handle_client(client_socket, client_address):
         # client_socket.send(content)
 
     client_socket.close()
+    print(f"[NEW CONNECTION] {client_address} closed.")
 
 
 def accept_incoming_connections(server_socket):
@@ -95,11 +96,6 @@ def accept_incoming_connections(server_socket):
         # request_thread.daemon = True
         request_thread.start()
         # request_thread.join()
-
-        print(f"[NEW CONNECTION] {client_address} closed.")
-
-    # handle_client(client_socket)
-
 
 def check_login(request, client_socket):
     if "uname=admin&psw=123456" not in request:
