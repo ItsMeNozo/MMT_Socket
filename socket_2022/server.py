@@ -1,15 +1,8 @@
 import socket
 import threading
-import time
+import server_config
 
 
-BUFFERSIZE = 10240
-PORT = 8080
-# HOST = socket.gethostbyname(socket.gethostname())
-HOST = ""
-ADDR = (HOST, PORT)
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!quit"
 content_type_dict = {
     "html": "text/html",
     "htm": "text/html",
@@ -25,10 +18,10 @@ content_type_dict = {
 
 def read_request(client_socket):
     request = ""  # set this for time out case
-    client_socket.settimeout(5)  # block socket operations for 5 sec
+    client_socket.settimeout(1)  # block socket operations for 5 sec
 
     try:
-        request = client_socket.recv(BUFFERSIZE).decode()
+        request = client_socket.recv(server_config.BUFFERSIZE).decode()
     except TimeoutError:
         if not request:
             print("DIDN'T RECEIVE DATA. [TIMEOUT]")
@@ -38,11 +31,20 @@ def read_request(client_socket):
 
 def handle_client(client_socket):
     while True:
-        request = read_request(client_socket)
+        # request = read_request(client_socket)
+        client_socket.settimeout(2)
+        try:
+            request = client_socket.recv(server_config.BUFFERSIZE).decode()
+        except socket.timeout:
+            print("DIDN'T RECEIVE DATA. [TIMEOUT]")
+            client_socket.close()
+            break
+
         if not request:
             # header = """HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"""
             header = """HTTP/1.1 200 OK\r\nConnection: close"""
             client_socket.send(header.encode())
+            client_socket.close()
             break
 
         if "POST" in request:
@@ -75,10 +77,10 @@ def handle_client(client_socket):
             content_type = content_type_dict[file_type]
 
         # Send HTTP response
-        header = """HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nContent-Type: %s\r\nContent-Length: %s\r\n\r\n""" % (content_type, len(content))
+        header = """HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %s\r\n\r\n""" % (content_type, len(content))
 
-        client_socket.send(header.encode())
-        client_socket.send(content)
+        client_socket.sendall(header.encode() + content)
+        # client_socket.send(content)
 
     client_socket.close()
 
@@ -109,14 +111,13 @@ def check_login(request, client_socket):
 
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(ADDR)
+server_socket.bind(server_config.ADDR)
 
 
-def start():
-    global server_socket
+def start(server_socket):
     print(f"[LISTENING] Server is listening")
-    server_socket.listen(1)
+    server_socket.listen(5)
     accept_incoming_connections(server_socket)
 
 
-start()
+start(server_socket)
