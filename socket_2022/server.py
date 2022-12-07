@@ -16,25 +16,12 @@ content_type_dict = {
 }
 
 
-def read_request(client_socket):
-    request = ""  # set this for time out case
-    client_socket.settimeout(1)  # block socket operations for 5 sec
-
-    try:
-        request = client_socket.recv(server_config.BUFFERSIZE).decode()
-    except TimeoutError:
-        if not request:
-            print("DIDN'T RECEIVE DATA. [TIMEOUT]")
-    finally:
-        return request
-
-
 def handle_client(client_socket, client_address):
     print(f"[NEW CONNECTION] {client_address} connected.")
 
     while True:
         # request = read_request(client_socket)
-        client_socket.settimeout(2)
+        client_socket.settimeout(5)
         try:
             request = client_socket.recv(server_config.BUFFERSIZE).decode()
         except socket.timeout:
@@ -51,9 +38,10 @@ def handle_client(client_socket, client_address):
             if not check_login(request, client_socket):
                 # client_socket.close()
                 break
-        print(f"[HTTP REQUEST]\n{request}")
 
         headers = request.split('\n')
+        print(f"[HTTP REQUEST]\n{headers[0]}")
+
         filename = headers[0].split()[1]
         if filename == '/':
             filename = 'index.html'
@@ -93,7 +81,15 @@ def accept_incoming_connections(server_socket):
         request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
         # request_thread.daemon = True
         request_thread.start()
-        # request_thread.join()
+        request_thread.join()
+
+        print(f"[NEW CONNECTION] {client_address} closed.")
+
+    # # Non-concurrency code:
+    # client_socket, client_address = server_socket.accept()
+    # # request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+    # handle_client(client_socket, client_address)
+    # print(f"[NEW CONNECTION] {client_address} closed.")
 
 def check_login(request, client_socket):
     if "uname=admin&psw=123456" not in request:

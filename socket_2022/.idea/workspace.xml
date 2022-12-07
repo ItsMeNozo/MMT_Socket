@@ -4,6 +4,7 @@
     <list default="true" id="58712ecb-57a6-4ef0-9a91-23295ea0496b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/server_config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +44,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f1dec79f-2115-4d74-bb91-198c0d2ef2da" name="Changes" comment="" />
+      <changelist id="58712ecb-57a6-4ef0-9a91-23295ea0496b" name="Changes" comment="" />
       <created>1669735491267</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
