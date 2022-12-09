@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="58712ecb-57a6-4ef0-9a91-23295ea0496b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images.html" beforeDir="false" afterPath="$PROJECT_DIR$/images.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/server_config.py" afterDir="false" />
     </list>
@@ -30,14 +32,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/school/University/2nd-year/1st semester/MMT/socket-projects/MMT_Socket/socket_2022/images"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\school\University\2nd-year\1st semester\MMT\socket-projects\MMT_Socket\socket_2022\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\school\University\2nd-year\1st semester\MMT\socket-projects\MMT_Socket\socket_2022\images" />
       <recent name="D:\school\University\2nd-year\1st semester\MMT\socket-projects\MMT_Socket\socket_2022" />
     </key>
   </component>
@@ -62,5 +69,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/server.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
