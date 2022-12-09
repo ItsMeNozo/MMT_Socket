@@ -35,7 +35,7 @@ def read_request(client_socket):
 def get_filename_content_type(headers):
     filename = headers[0].split()[1]
     if filename == '/':
-        filename = 'index.html'
+        filename = '/index.html'
 
     if '.' in filename:
         file_type = filename.split('.')[1]
@@ -79,13 +79,13 @@ def handle_client(client_socket, client_address):
             f.seek(0, os.SEEK_END)
             total = f.tell()
             f.seek(0)  # go back to the start
-            data = f.read(server_config.BUFFERSIZE)
             header = """HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %s\r\n\r\n""" % (content_type, total)
             client_socket.sendall(header.encode())
 
+            data = f.read(1024)
             client_socket.send(data)
             while data:
-                data = f.read(server_config.BUFFERSIZE)
+                data = f.read(1024)
                 client_socket.send(data)
 
             f.close()
@@ -101,17 +101,11 @@ def handle_client(client_socket, client_address):
 def accept_incoming_connections(server_socket):
     """Sets up handling for incoming clients."""
 
-    # while True:
-    #     client_socket, client_address = server_socket.accept()
-    #     client_socket.settimeout(20)
-    #     request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
-    #     request_thread.start()
-
-    # Non-concurrency code:
-    client_socket, client_address = server_socket.accept()
-    # request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
-    client_socket.settimeout(5)  # block socket operations for 5 sec
-    handle_client(client_socket, client_address)
+    while True:
+        client_socket, client_address = server_socket.accept()
+        client_socket.settimeout(5)
+        request_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+        request_thread.start()
 
 
 def check_login(request, client_socket):
@@ -134,4 +128,3 @@ def start(server_socket):
 
 
 start(server_socket)
-
